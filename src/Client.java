@@ -1,6 +1,8 @@
 import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by edwar on 10/1/2017.
@@ -75,6 +77,17 @@ public class Client {
             }
         });
         t2.start();
+        Thread t3 = new Thread(() -> {
+            Timer timer = new Timer(true);
+//            timer.scheduleAtFixedRate(timerTask, 0, 10 * 1000);
+            timer.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    dataOut.println("IMAV");
+                }
+            }, 0, 10*1000);
+        });
+        t3.start();
 
     }
 }

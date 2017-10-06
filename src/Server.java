@@ -71,7 +71,12 @@ public class Server {
 
                     return;
                 }
-
+                if(message.equals("IMAV"))
+                {
+                    System.out.println(message); //printing client IMAV message
+                    out.println("you are alive!");
+                    continue;
+                }
                 System.out.println("Debug: " + message);
                 out.println("J_ER 405: better luck next time");
             }
