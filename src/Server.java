@@ -2,9 +2,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.util.*;
 
 /**
  * Server class, has a PORT nr, HashSet of nicknames
@@ -92,6 +91,34 @@ public class Server {
             }
         });
         t.start();
+
+        /*
+imav thread checks latestIMAV from chatter in Chatter class, and if
+difference betwwen it and now() is more than a minute it calls removeClient().
+This functionality works, but not properly: it removes inactive client and sends an updated list to
+participants, but exceptions, such as java.util.ConcurrentModificationException  and java.util.NoSuchElementException: No line found
+are thrown. This thread still needs to be improved.
+ */
+        Thread imav = new Thread(() -> {
+
+            Timer timer = new Timer(true);
+            timer.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    for (Chatter c : nicknames) {
+
+                        //now the IMAV part
+                        LocalDateTime nowMinusMinute;
+                        nowMinusMinute = LocalDateTime.now().minusMinutes(1);
+                        if (nowMinusMinute.isAfter(chatter.getLatestIMAV())) {
+                            removeClient(chatter);
+                        }
+                    }
+                }
+            }, 10000, 30*1000);
+        });
+        //imav.start();
+
 
 
     }
