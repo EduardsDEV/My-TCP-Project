@@ -7,6 +7,9 @@ import java.util.Scanner;
 import java.util.Set;
 
 /**
+ * Server class, has a PORT nr, HashSet of nicknames
+ * in main() runs the runServer(). runServer() creates ServerSocket
+ * and waits for multiple amount of clients to connect, calls the ServerThread thread
  * Created by edwar on 10/1/2017.
  */
 public class Server {
@@ -35,6 +38,13 @@ public class Server {
         }
     }
 
+    /**
+     * adds the client to the nicknames HashSet,
+     * updates a String with all the chatters nicknames,
+     * sends updated list to all the chatters.
+     * Creates a thread using lambda expression to handle messages from client(DATA, QUIT, IMAV).
+     * @param chatter
+     */
     public static synchronized void addClient(Chatter chatter) {
         nicknames.add(chatter);
         String fullNicknamesList = "";
@@ -52,7 +62,7 @@ public class Server {
             while (true) {
                 String message = sc.nextLine();
                 //now the DATA part
-                if (message.startsWith("DATA")) {
+                if (Services.validDataFormat(message)) {
                     System.out.println(message);//printing client message
                     Server.broadcastMsg(message);
                     continue;
@@ -60,7 +70,7 @@ public class Server {
 
                 //-------------------------------------------------------------------------------------------------------------
                 //now QUIT part
-                if (message.equals("QUIT")) {
+                if (Services.validQuitFormat(message)) {
                     removeClient(chatter);
                     System.out.println(message + " " + chatter.getNickname());
                     try {
@@ -77,7 +87,7 @@ public class Server {
                     out.println("you are alive!");
                     continue;
                 }
-                System.out.println("Debug: " + message);
+                System.out.println("Debug: " + message);    // this is to print anything else that coming to server, left for debugging
                 out.println("J_ER 405: better luck next time");
             }
         });
@@ -86,6 +96,12 @@ public class Server {
 
     }
 
+    /**
+     * Removes the client form the "nicknames" HashSet
+     * updates the String containing all the nicknames
+     * sends an updatet String to all the chatters(LIST <n1><n2>...)
+     * @param chatter
+     */
     public static synchronized void removeClient(Chatter chatter) {
         nicknames.remove(chatter);
         String fullNicknamesList = "";
@@ -99,24 +115,23 @@ public class Server {
         }
     }
 
+    /**
+     * broadcasts message to all the chatters from nicknames HashSet
+     * @param message
+     */
     public static synchronized void broadcastMsg(String message) {
         for (Chatter c : nicknames) {
             c.getOutput().println(message);
         }
     }
 
-    public static synchronized void checkClient() {
-        Thread t = new Thread(() -> {
-            for (Chatter c : nicknames) {
-                c.getOutput().println("");
-                if (c.getOutput().checkError()) {
-                    c.getInput().close();
-                    removeClient(c);
-                }
-            }
-        });
-    }
-
+    /**
+     * checks if nickname(parameter) is not used already in the nicknames HashSet
+     *
+     * @param nickname
+     * @return
+     * true if is not used
+     */
     public static boolean isNotUsed(String nickname) {
         for (Chatter c : nicknames) {
             if (c.getNickname().equals(nickname)) {

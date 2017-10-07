@@ -2,6 +2,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * this class uses Pattern and Matcher classes to check if
+ * specified String qualifies for the pattern provided.
  * Created by edwar on 9/30/2017.
  */
 public class UsernameValidator {

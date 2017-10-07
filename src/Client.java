@@ -1,5 +1,6 @@
 import java.io.*;
 import java.net.Socket;
+import java.time.LocalDateTime;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -83,9 +84,10 @@ public class Client {
             timer.scheduleAtFixedRate(new TimerTask() {
                 @Override
                 public void run() {
+                    chatter.setLatestIMAV(LocalDateTime.now());
                     dataOut.println("IMAV");
                 }
-            }, 0, 10*1000);
+            }, 10000, 30*1000);
         });
         t3.start();
 
