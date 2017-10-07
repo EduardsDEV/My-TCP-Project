@@ -83,7 +83,7 @@ public class Server {
                 if(message.equals("IMAV"))
                 {
                     System.out.println(message); //printing client IMAV message
-                    out.println("you are alive!");
+                    //out.println("you are alive!");
                     continue;
                 }
                 System.out.println("Debug: " + message);    // this is to print anything else that coming to server, left for debugging

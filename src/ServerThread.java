@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 /**
  * ServerThread thread, is called in Server class when serverSocket accepts a new client.
+ *
  * Created by edwar on 10/1/2017.
  */
 public class ServerThread extends Thread {

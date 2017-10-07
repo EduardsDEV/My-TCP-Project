@@ -6,6 +6,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
+ * Client class, connects to server, sends join,
+ * and starts 3 more threads, 1 for sending smgs, 2 for receiving,
+ * 3rd for sending IMAV.
+ *
  * Created by edwar on 10/1/2017.
  */
 public class Client {
@@ -63,7 +67,12 @@ public class Client {
                 } else {
                     msg = "DATA " + nickname + ": " + input;
                 }
-                dataOut.println(msg);
+                if(input.length() < 250 ){
+
+                    dataOut.println(msg);
+                }else{
+                    System.out.println("msg too long");
+                }
 
             }
         });
@@ -78,6 +87,9 @@ public class Client {
             }
         });
         t2.start();
+        /**
+         * this thread is sending IMAV msg every x seconds
+         */
         Thread t3 = new Thread(() -> {
             Timer timer = new Timer(true);
 //            timer.scheduleAtFixedRate(timerTask, 0, 10 * 1000);

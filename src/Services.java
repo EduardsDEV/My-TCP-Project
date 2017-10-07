@@ -1,6 +1,7 @@
 /**
  * Services class that contains methods that check whether provided String
  * is a valid String
+ *
  * Created by edwar on 10/3/2017.
  */
 public class Services {
