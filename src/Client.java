@@ -9,7 +9,7 @@ import java.util.TimerTask;
  * Client class, connects to server, sends join,
  * and starts 3 more threads, 1 for sending smgs, 2 for receiving,
  * 3rd for sending IMAV.
- *
+ * <p>
  * Created by edwar on 10/1/2017.
  */
 public class Client {
@@ -20,7 +20,7 @@ public class Client {
 
     public static void main(String[] args) throws IOException {
 
-        new Client("127.0.0.1", 4444).run();
+        new Client("172.16.27.152", 1448).run();
     }
 
     public Client(String host, int port) {
@@ -29,7 +29,7 @@ public class Client {
     }
 
     public void run() throws IOException {
-        Socket socket = new Socket("127.0.0.1", 4444);
+        Socket socket = new Socket("172.16.27.152", 1448);
         Scanner sc = new Scanner(System.in);
         System.out.println("enter nickname: ");
         nickname = sc.nextLine();
@@ -39,7 +39,7 @@ public class Client {
         dataOut.println(join);
         String answer = dataIn.nextLine();
         System.out.println(answer);
-        while(answer.contains("402")){          // this one offers to type another nickname;
+        while (answer.contains("402")) {          // this one offers to type another nickname;
             System.out.println("Please choose another nickname");
             nickname = sc.nextLine();
             join = "JOIN " + nickname + ", " + host + ":" + port;
@@ -67,10 +67,10 @@ public class Client {
                 } else {
                     msg = "DATA " + nickname + ": " + input;
                 }
-                if(input.length() < 250 ){
+                if (input.length() < 250) {
 
                     dataOut.println(msg);
-                }else{
+                } else {
                     System.out.println("msg too long");
                 }
 
@@ -90,18 +90,16 @@ public class Client {
         /**
          * this thread is sending IMAV msg every x seconds
          */
-        Thread t3 = new Thread(() -> {
-            Timer timer = new Timer(true);
+        Timer timer = new Timer(true);
 //            timer.scheduleAtFixedRate(timerTask, 0, 10 * 1000);
-            timer.scheduleAtFixedRate(new TimerTask() {
-                @Override
-                public void run() {
-                    chatter.setLatestIMAV(LocalDateTime.now());
-                    dataOut.println("IMAV");
-                }
-            }, 10000, 30*1000);
-        });
-        t3.start();
-
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                chatter.setLatestIMAV();
+                dataOut.println("IMAV");
+            }
+        }, 10000, 03 * 1000);
     }
+
+
 }

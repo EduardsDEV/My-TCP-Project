@@ -23,7 +23,7 @@ public class Server {
 
     public void runServer() throws IOException {
         ServerSocket serverSocket = new ServerSocket(PORT);
-        System.out.println("Server up and ready for connections on port: " + PORT);
+        //System.out.println("Server up and ready for connections on port: " + PORT);
         System.out.println("#--------------#");
         System.out.println("#Server Running#");
         System.out.println("#**************#");
@@ -99,25 +99,22 @@ This functionality works, but not properly: it removes inactive client and sends
 participants, but exceptions, such as java.util.ConcurrentModificationException  and java.util.NoSuchElementException: No line found
 are thrown. This thread still needs to be improved.
  */
-        Thread imav = new Thread(() -> {
 
-            Timer timer = new Timer(true);
-            timer.scheduleAtFixedRate(new TimerTask() {
-                @Override
-                public void run() {
-                    for (Chatter c : nicknames) {
-
-                        //now the IMAV part
-                        LocalDateTime nowMinusMinute;
-                        nowMinusMinute = LocalDateTime.now().minusMinutes(1);
-                        if (nowMinusMinute.isAfter(chatter.getLatestIMAV())) {
-                            removeClient(chatter);
-                        }
-                    }
-                }
-            }, 10000, 30*1000);
-        });
-        //imav.start();
+//            Timer timer = new Timer(true);
+//            timer.scheduleAtFixedRate(new TimerTask() {
+//                @Override
+//                public void run() {
+//                    for (Chatter c : nicknames) {
+//
+//                        //now the IMAV part
+//                        LocalDateTime nowMinusMinute;
+//                        nowMinusMinute = LocalDateTime.now().minusMinutes(1);
+//                        if (nowMinusMinute.isAfter(chatter.getLatestIMAV())) {
+//                            removeClient(chatter);
+//                        }
+//                    }
+//                }
+//            }, 10000, 30*1000);
 
 
 

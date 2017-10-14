@@ -56,9 +56,8 @@ public class Chatter {
     /**
      * this part is not finished yet, the idea is to store latestIMAV time so that
      * server can compare this time with now() time and see if he should kick chatter from server or keep him.
-     * @param latestIMAV
      */
-    public void setLatestIMAV(LocalDateTime latestIMAV) {
+    public void setLatestIMAV() {
         latestIMAV = LocalDateTime.now();
     }
 }
